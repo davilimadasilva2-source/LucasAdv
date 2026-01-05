@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Lucas Adventure - Versão Personagens</title>
+    <style>
+        /* RESET BÁSICO */
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #000; overflow: hidden; 
+            touch-action: none; overscroll-behavior: none; 
+            user-select: none; -webkit-user-select: none;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* CANVAS E FUNDO DO MENU */
+        canvas { 
+            display: block; 
+            width: 100vw;
+            height: 100vh;
+            background-size: cover; 
+            background-position: center;
+        }
+
+        /* CAMADA DE INTERFACE (BOTÕES DO MENU) */
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 200;
+        }
+
+        .btn-menu {
+            width: 220px; padding: 18px; margin: 12px;
+            background: rgba(231, 76, 60, 0.9); color: white; border: 3px solid white;
+            font-weight: bold; font-size: 22px; border-radius: 15px;
+            cursor: pointer; box-shadow: 0 6px 0 #c0392b;
+            text-align: center;
+            transition: transform 0.1s;
+        }
+
+        .btn-menu:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #c0392b;
+        }
+
+        /* MODAL DE SELEÇÃO DE PERSONAGENS */
+        #modal-personagens {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            z-index: 300;
+        }
+
+        .modal-content {
+            background: #2c3e50; padding: 30px; border-radius: 25px;
+            border: 4px solid white; text-align: center; color: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .char-container {
+            display: flex; gap: 25px; margin: 25px 0;
+            justify-content: center;
+        }
+
+        .char-box {
+            background: #34495e; padding: 15px; border-radius: 20px;
+            border: 4px solid transparent; transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .char-selected { 
+            border-color: #f1c40f !important; 
+            background: #1abc9c;
+            transform: scale(1.1); 
+        }
+
+        .char-box img { 
+            width: 90px; height: 120px; 
+            object-fit: contain; display: block; 
+            pointer-events: none;
+        }
+
+        .char-box p { 
+            margin: 12px 0 0; font-weight: bold; 
+            font-size: 16px; letter-spacing: 1px;
+        }
+
+        #btn-grito {
+            position: absolute; bottom: 30px; right: 20px;
+            width: 95px; height: 95px; border-radius: 50%;
+            background-color: #555; color: white; border: 4px solid white;
+            font-weight: bold; font-size: 11px; display: none; align-items: center; justify-content: center;
+            text-align: center; z-index: 100;
+        }
+
+        .mega-pronto { 
+            background-color: #fff !important; 
+            color: #000 !important; 
+            box-shadow: 0 0 25px #fff; 
+            animation: tremer 0.1s infinite; 
+        }
+
+        @keyframes tremer { 
+            0% { transform: translate(2px, 2px); } 
+            50% { transform: translate(-2px, -2px); } 
+            100% { transform: translate(2px, -2px); } 
+        }
+    </style>
+</head>
+<body>
+
+   <div id="ui-layer" style="display: none;">
+        <button class="btn-menu" onclick="iniciarJogo()">JOGAR</button>
+        <button class="btn-menu" onclick="abrirPersonagens()">PERSONAGENS</button>
+        <button class="btn-menu" onclick="mostrarRanking()">RANKING</button>
+    </div>
+
+    <div id="modal-personagens">
+        <div class="modal-content">
+            <h2 style="margin: 0 0 10px 0; font-size: 28px;">QUEM VOCÊ É?</h2>
+            
+            <div class="char-container">
+                <div class="char-box" id="box-davi" onclick="selecionarChar('davi')">
+                    <img src="assets/img/daviplay.png" alt="Davi">
+                    <p>DAVI</p>
+                </div>
+                
+                <div class="char-box" id="box-alice" onclick="selecionarChar('alice')">
+                    <img src="assets/img/aliceplay.png" alt="Alice">
+                    <p>ALICE</p>
+                </div>
+            </div>
+
+            <button class="btn-menu" 
+                    style="width:160px; padding:12px; font-size:18px; background:#95a5a6; box-shadow: 0 4px 0 #7f8c8d; border: 2px solid white;" 
+                    onclick="fecharPersonagens()">
+                VOLTAR
+            </button>
+        </div>
+    </div>
+
+    <div id="btn-grito">CARREGANDO</div>
+
+    <canvas id="game"></canvas>
+
+    <script src="js/constants.js"></script>
+    <script src="js/logic.js"></script>
+
+</body>
+</html>
